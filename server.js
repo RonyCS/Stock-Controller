@@ -1,4 +1,3 @@
-const { Prisma } = require('@prisma/client');
 const express = require('express');
 const app = express();
 const PORT = 3000;
@@ -7,23 +6,59 @@ const prisma = new PrismaClient();
 
 app.use(express.json());
 
-//@products
-app.get('/product', (req, res) => {
-    res.send('...');
-});
 
 //@allproducts
-app.get('/products',  (req, res) => {
-    res.send('...');
+app.get('/products', async  (req, res) => {
+
+  try {
+
+    const produtos = await prisma.produto.findMany();
+    
+      console.log('Lista de Produtos: ' + produtos);
+       return res.status(200).json(produtos)
+
+  } catch (error) {
+
+      console.log('Erro ao retornar estoque ' + error);
+         res.status(404).json({ error: 'Erro ao retornar estoque' });
+  }
 });
 
+//@products
+app.get('/products/:id',async (req, res) => {
+  const {id} = req.params;
+
+  try {
+  
+    const Listarproduto = await prisma.produto.findUnique({
+      where:{
+        id:Number(id)
+      }
+    });
+
+    console.log('Produto exibido:', Listarproduto);
+
+    return res.status(200).json(Listarproduto);
+
+  } catch (error) {
+
+    console.error('Erro ao exibir produto:', error);
+    return res.status(404).json({ error: 'Erro ao exibir produto' });
+    
+  }
+});
+
+
+
+
 app.post('/product',async (req, res) => {
-    const {nome, quantidade, preco, marca} = req.body;
+     
+  const {nome, quantidade, preco, marca} = req.body; 
 
     console.log('Dados recebidos: ' + req.body)
 
     try {
-        // Criação do produto no banco de dados
+       
         const produto = await prisma.produto.create({
           data: {
             nome,
@@ -46,16 +81,60 @@ app.post('/product',async (req, res) => {
       }
     });
 
-//@ Criação da Rota put
-app.get('/products', (req, res) => {
-    res.send('...Todos os Produtos');
+
+
+
+app.put('/products/:id', async (req, res) => {
+  const {id} = req.params;
+  const {nome, quantidade, preco, marca} = req.body; 
+
+  try {
+    
+    const produtoAtualizado = await prisma.produto.update({
+      where: {
+        id : Number(id)
+      },
+      data: {
+        nome,
+        quantidade: parseInt(quantidade, 10),
+        preco,
+        marca,
+      }
+    });
+
+    res.status(200).json(produtoAtualizado)
+  } catch (error) {
+    
+      console.log(error)
+      res.status(400).json({error: 'Produto não existente'});
+  }
+
+
 });
 
-//@ Criação da Rota delete
-app.get('/products', (req, res) => {
-    res.send('...Todos os Produtos');
-});
 
+app.delete('/products/:id', async (req, res) => {
+  const {id} = req.params;
+  
+
+  try {
+    
+    const produtoDeletado = await prisma.produto.delete({
+      where: {
+        id : Number(id)
+      }
+    });
+
+    res.status(200).json(produtoDeletado)
+    res.send('produto deletado com suceesso ' + produtoDeletado);
+  } catch (error) {
+    
+      console.log(error)
+      res.status(400).json({error: 'Produto não existente'});
+  }
+
+
+});
 
 
 
