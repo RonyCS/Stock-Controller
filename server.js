@@ -1,6 +1,9 @@
+const { Prisma } = require('@prisma/client');
 const express = require('express');
 const app = express();
 const PORT = 3000;
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 app.use(express.json());
 
@@ -10,33 +13,38 @@ app.get('/product', (req, res) => {
 });
 
 //@allproducts
-app.get('/products', (req, res) => {
-    res.send('...Todos os Produtos');
+app.get('/products',  (req, res) => {
+    res.send('...');
 });
 
-app.post('/product', (req, res) => {
-    const { id, nome, Quantidade, preco, marca, } = req.body;
+app.post('/product',async (req, res) => {
+    const {nome, quantidade, preco, marca} = req.body;
 
-    //tratamento de exceção para o campo de nome
- /*  
-        if (!nome != toString) {
-        return res.status(400).json({ mensagem: 'No campo Nome só é permido String ' });
-         }
+    console.log('Dados recebidos: ' + req.body)
 
- */
+    try {
+        // Criação do produto no banco de dados
+        const produto = await prisma.produto.create({
+          data: {
+            nome,
+            quantidade: parseInt(quantidade, 10),
+            preco,
+            marca,
+          },
+        });
+    
+        console.log('Produto criado:', produto);
+    
+        // Retorne o produto criado
+        return res.status(201).json(produto);
 
-    // Exemplo de resposta
-    res.json({
-        mensagem: 'Dados recebidos com sucesso!',
-        dados: {
-            id: id,
-            nome:nome,
-            Quantidade: Quantidade,
-            preco:preco,
-            marca:marca,
-        }
+      } catch (error) {
+
+        console.error('Erro ao criar produto:', error);
+        return res.status(500).json({ error: 'Erro ao criar produto' });
+        
+      }
     });
-});
 
 //@ Criação da Rota put
 app.get('/products', (req, res) => {
@@ -47,15 +55,6 @@ app.get('/products', (req, res) => {
 app.get('/products', (req, res) => {
     res.send('...Todos os Produtos');
 });
-
-
-
-
-
-
-
-
-
 
 
 

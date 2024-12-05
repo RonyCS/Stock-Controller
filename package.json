@@ -10,6 +10,8 @@
   "author": "Rony Cavalcanti da Silva",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.1"
+    "@prisma/client": "^6.0.1",
+    "express": "^4.21.1",
+    "prisma": "^6.0.1"
   }
 }
