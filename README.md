@@ -63,7 +63,7 @@ Instale as dependências:
 Inicie a aplicação:
 -npm start
 
-### Pré-requisitos:
+## Pré-requisitos:
 
 Para executar o projeto, você precisará das seguintes ferramentas instaladas no seu ambiente:
 
