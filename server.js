@@ -3,18 +3,18 @@ const app = express();
 const PORT = 3000;
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const cors = require('cors');
 
 app.use(express.json());
+app.use(cors());
 
 
-//@allproducts
+
 app.get('/products', async  (req, res) => {
 
   try {
 
     const produtos = await prisma.produto.findMany();
-    
-      console.log('Lista de Produtos: ' + produtos);
        return res.status(200).json(produtos)
 
   } catch (error) {
@@ -24,7 +24,7 @@ app.get('/products', async  (req, res) => {
   }
 });
 
-//@products
+
 app.get('/products/:id',async (req, res) => {
   const {id} = req.params;
 
@@ -47,7 +47,6 @@ app.get('/products/:id',async (req, res) => {
     
   }
 });
-
 
 
 
@@ -114,26 +113,22 @@ app.put('/products/:id', async (req, res) => {
 
 
 app.delete('/products/:id', async (req, res) => {
-  const {id} = req.params;
-  
+  const { id } = req.params;
 
   try {
-    
+
     const produtoDeletado = await prisma.produto.delete({
       where: {
-        id : Number(id)
+        id: Number(id)
       }
     });
 
-    res.status(200).json(produtoDeletado)
-    res.send('produto deletado com suceesso ' + produtoDeletado);
+
+    res.status(200).json(produtoDeletado);
   } catch (error) {
-    
-      console.log(error)
-      res.status(400).json({error: 'Produto não existente'});
+    console.log(error);
+    res.status(400).json({ error: 'Produto não existente' });
   }
-
-
 });
 
 
@@ -141,7 +136,7 @@ app.delete('/products/:id', async (req, res) => {
 
 
 
-// Inicia o servidor
+
  app.listen(PORT, (erro) => {
     
         if (erro) {

@@ -4,14 +4,22 @@
   "description": "Projeto para Disciplina da Faculdade",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js"
+    "test": "node server.js",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server.js",
+    "client": "npm run dev --prefix front"
   },
   "keywords": [],
   "author": "Rony Cavalcanti da Silva",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.0.1",
+    "cors": "^2.8.5",
     "express": "^4.21.1",
-    "prisma": "^6.0.1"
+    "prisma": "^6.0.1",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }
