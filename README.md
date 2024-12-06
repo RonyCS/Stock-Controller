@@ -1,7 +1,6 @@
 # Stock Controller
 
 ![Node.js](https://img.shields.io/badge/Node.js-v14.x%20LTS-green?style=flat&logo=node.js)
-![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-brightgreen?style=flat)
 
 ## Sobre o Projeto
